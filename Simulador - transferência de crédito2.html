@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador de Transferência de Crédito Habitação | RE/MAX Vantagem Home</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --remax-blue: #003f7f;
+            --remax-red: #c41e3a;
+            --remax-light-blue: #e6f0ff;
+        }
+        
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            min-height: 100vh;
+        }
+        
+        .professional-gradient {
+            background: linear-gradient(135deg, var(--remax-blue) 0%, #0056b3 100%);
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .premium-shadow {
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+        }
+        
+        .input-professional {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 12px 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .input-professional:focus {
+            outline: none;
+            border-color: var(--remax-blue);
+            box-shadow: 0 0 0 3px rgba(0, 63, 127, 0.1);
+            background: white;
+        }
+        
+        .btn-professional {
+            background: linear-gradient(135deg, var(--remax-red) 0%, #d32f2f 100%);
+            color: white;
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-weight: 600;
+            border: none;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-professional:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(196, 30, 58, 0.3);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: var(--remax-blue);
+            border: 2px solid var(--remax-blue);
+            padding: 12px 26px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            background: var(--remax-blue);
+            color: white;
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            background: var(--remax-light-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+        
+        .result-card {
+            background: linear-gradient(135deg, var(--remax-blue) 0%, #0056b3 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 24px;
+        }
+        
+        .comparison-card {
+            border-left: 4px solid;
+            border-radius: 8px;
+        }
+        
+        .current-loan {
+            border-left-color: #3b82f6;
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+        }
+        
+        .new-loan {
+            border-left-color: #10b981;
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+        }
+        
+        .floating-contact {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            z-index: 1000;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .nav-shadow {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- WhatsApp Floating Button -->
+    <a href="https://wa.me/351962323123" target="_blank" rel="noopener noreferrer" class="floating-contact">
+        <div class="bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-xl transition-all duration-300">
+            <i class="fab fa-whatsapp text-2xl"></i>
+        </div>
+    </a>
+
+    <!-- Navigation -->
+    <nav class="bg-white nav-shadow fixed w-full top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center">
+                    <a href="/" class="flex items-center">
+                        <img src="https://ik.imagekit.io/ij9blp5q7/horizontal-removebg-preview.png?updatedAt=1755565337241" 
+                             alt="RE/MAX Vantagem Home" 
+                             class="h-10 md:h-14 w-auto">
+                    </a>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="/" class="text-gray-700 hover:text-blue-600 transition font-medium">Início</a>
+                    <a href="/#imoveis" class="text-gray-700 hover:text-blue-600 transition font-medium">Imóveis</a>
+                    <a href="/#sobre" class="text-gray-700 hover:text-blue-600 transition font-medium">Sobre Nós</a>
+                    <a href="/#servicos" class="text-gray-700 hover:text-blue-600 transition font-medium">Serviços</a>
+                    <a href="/#contato" class="text-gray-700 hover:text-blue-600 transition font-medium">Contato</a>
+                </div>
+                <div class="flex items-center">
+                    <a href="tel:+351962323123" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-semibold transition flex items-center">
+                        <i class="fas fa-phone mr-2"></i> 962 323 123
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="professional-gradient text-white pt-28 pb-20">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">Simulador de Transferência de Crédito Habitação</h1>
+            <p class="text-xl opacity-90 max-w-3xl mx-auto mb-8">
+                Descubra quanto pode poupar transferindo o seu crédito para condições mais vantajosas
+            </p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <div class="bg-white/10 rounded-full px-4 py-2 text-sm font-medium">
+                    <i class="fas fa-euro-sign mr-2"></i> Poupança garantida
+                </div>
+                <div class="bg-white/10 rounded-full px-4 py-2 text-sm font-medium">
+                    <i class="fas fa-clock mr-2"></i> Processo simplificado
+                </div>
+                <div class="bg-white/10 rounded-full px-4 py-2 text-sm font-medium">
+                    <i class="fas fa-shield-alt mr-2"></i> Sem custos para si
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="py-12 px-4">
+        <div class="max-w-6xl mx-auto">
+            <!-- Calculator Section -->
+            <div class="glass-effect rounded-2xl p-8 premium-shadow mb-8">
+                <div class="flex items-center mb-6">
+                    <div class="feature-icon">
+                        <i class="fas fa-exchange-alt text-2xl remax-text-blue"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-800">Simulação de Transferência</h2>
+                        <p class="text-gray-600">Compare as condições atuais com uma nova proposta</p>
+                    </div>
+                </div>
+                
+                <!-- Valor em Dívida -->
+                <div class="mb-8 text-center">
+                    <label class="block text-sm font-semibold text-gray-700 mb-3">Valor em Dívida (€)</label>
+                    <div class="max-w-md mx-auto">
+                        <input type="number" id="valorDivida" value="200000" 
+                               class="input-professional w-full text-center text-lg font-semibold">
+                    </div>
+                </div>
+                
+                <!-- Comparison Cards -->
+                <div class="grid lg:grid-cols-2 gap-8 mb-8">
+                    <!-- Crédito Atual -->
+                    <div class="comparison-card current-loan p-6">
+                        <h3 class="text-xl font-bold text-blue-800 mb-4 flex items-center">
+                            <i class="fas fa-home mr-2"></i> Crédito Atual
+                        </h3>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Prazo Restante (anos)</label>
+                                <input type="number" id="prazoRestante" value="20" 
+                                       class="input-professional w-full">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Tipo de Taxa</label>
+                                <select id="tipoTaxaAtual" class="input-professional w-full">
+                                    <option value="fixa">Taxa Fixa</option>
+                                    <option value="variavel3">Taxa Variável (3 meses)</option>
+                                    <option value="variavel6">Taxa Variável (6 meses)</option>
+                                    <option value="variavel12" selected>Taxa Variável (12 meses)</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Euribor (%)</label>
+                                <input type="number" id="euriborAtual" value="2.5" step="0.01" 
+                                       class="input-professional w-full">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Spread (%)</label>
+                                <input type="number" id="spreadAtual" value="1.0" step="0.01" 
+                                       class="input-professional w-full">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Nova Proposta -->
+                    <div class="comparison-card new-loan p-6">
+                        <h3 class="text-xl font-bold text-green-800 mb-4 flex items-center">
+                            <i class="fas fa-chart-line mr-2"></i> Nova Proposta
+                        </h3>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Novo Prazo (anos)</label>
+                                <input type="number" id="novoPrazo" value="25" 
+                                       class="input-professional w-full">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Tipo de Taxa</label>
+                                <select id="tipoNovaTaxa" class="input-professional w-full">
+                                    <option value="fixa">Taxa Fixa</option>
+                                    <option value="variavel3" selected>Taxa Variável (3 meses)</option>
+                                    <option value="variavel6">Taxa Variável (6 meses)</option>
+                                    <option value="variavel12">Taxa Variável (12 meses)</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Euribor (%)</label>
+                                <input type="number" id="novoEuribor" value="2.3" step="0.01" 
+                                       class="input-professional w-full">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Spread (%)</label>
+                                <input type="number" id="novoSpread" value="0.5" step="0.01" 
+                                       class="input-professional w-full">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center">
+                    <button onclick="calcularSimulacao()" class="btn-professional">
+                        <i class="fas fa-calculator mr-2"></i> Calcular Poupança
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Results Section -->
+            <div id="resultados" class="result-card hidden fade-in mb-8">
+                <h3 class="text-xl font-bold mb-6">Resultados da Simulação</h3>
+                
+                <div class="grid md:grid-cols-3 gap-6 mb-6">
+                    <div class="text-center">
+                        <p class="text-sm opacity-80">Prestação Atual</p>
+                        <p id="prestacaoAtual" class="text-2xl font-bold">€ 0</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-sm opacity-80">Nova Prestação</p>
+                        <p id="novaPrestacao" class="text-2xl font-bold">€ 0</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-sm opacity-80">Poupança Mensal</p>
+                        <p id="poupancaMensal" class="text-2xl font-bold">€ 0</p>
+                    </div>
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="text-center">
+                        <p class="text-sm opacity-80">Poupança Anual</p>
+                        <p id="poupancaAnual" class="text-xl font-semibold">€ 0</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-sm opacity-80">Poupança Total</p>
+                        <p id="poupancaTotal" class="text-xl font-semibold">€ 0</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Form -->
+            <div class="glass-effect rounded-2xl p-8 premium-shadow">
+                <div class="flex items-center mb-6">
+                    <div class="feature-icon">
+                        <i class="fas fa-user-tie text-2xl remax-text-blue"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-800">Solicite uma Análise Personalizada</h2>
+                        <p class="text-gray-600">Preencha o formulário e entraremos em contacto consigo</p>
+                    </div>
+                </div>
+                
+                <form id="contactForm" class="space-y-6">
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Nome Completo *</label>
+                            <input type="text" id="nome" required class="input-professional w-full" placeholder="João Silva">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Telefone *</label>
+                            <input type="tel" id="telefone" required class="input-professional w-full" placeholder="912 345 678">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Email *</label>
+                        <input type="email" id="email" required class="input-professional w-full" placeholder="joao.silva@email.com">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Observações</label>
+                        <textarea id="observacoes" rows="4" class="input-professional w-full" placeholder="Conte-nos mais sobre a sua situação..."></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn-professional w-full">
+                        <i class="fas fa-paper-plane mr-2"></i> Enviar Pedido
+                    </button>
+                </form>
+                
+                <div id="mensagemSucesso" class="hidden mt-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg text-center fade-in">
+                    <i class="fas fa-check-circle mr-2"></i> Pedido enviado com sucesso! Entraremos em contacto consigo brevemente.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-16 bg-gray-50">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">Vantagens da Transferência de Crédito</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Descubra os benefícios de transferir o seu crédito habitação</p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="text-center p-6">
+                    <div class="feature-icon mx-auto">
+                        <i class="fas fa-euro-sign text-2xl remax-text-blue"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-gray-800">Redução de Spread</h3>
+                    <p class="text-gray-600">Negocie condições mais vantajosas com spreads mais baixos</p>
+                </div>
+                
+                <div class="text-center p-6">
+                    <div class="feature-icon mx-auto">
+                        <i class="fas fa-calendar-alt text-2xl remax-text-blue"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-gray-800">Alteração de Prazo</h3>
+                    <p class="text-gray-600">Adeque o prazo do empréstimo às suas necessidades atuais</p>
+                </div>
+                
+                <div class="text-center p-6">
+                    <div class="feature-icon mx-auto">
+                        <i class="fas fa-shield-alt text-2xl remax-text-blue"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-gray-800">Seguros Mais Baratos</h3>
+                    <p class="text-gray-600">Reduza os custos com seguros de vida e multirriscos</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="professional-gradient text-white py-12">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <img src="https://ik.imagekit.io/ij9blp5q7/horizontal-removebg-preview.png?updatedAt=1755565337241" 
+                         alt="RE/MAX Vantagem Home" 
+                         class="w-32 h-auto mb-4 filter brightness-0 invert">
+                    <p class="text-sm opacity-80">Especialistas em transferência de crédito habitação</p>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Contactos</h4>
+                    <div class="space-y-2 text-sm opacity-80">
+                        <p><i class="fas fa-phone mr-2"></i> +351 962 323 123</p>
+                        <p><i class="fas fa-envelope mr-2"></i> sifreire@remax.pt</p>
+                        <p><i class="fas fa-map-marker-alt mr-2"></i> Calçada da Rinchoa, 4B, Rio de Mouro</p>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Horário</h4>
+                    <div class="space-y-2 text-sm opacity-80">
+                        <p>Segunda - Sexta: 9h - 19h</p>
+                        <p>Sábado: 9h - 13h</p>
+                        <p>Domingo: Fechado</p>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Siga-nos</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="bg-white/10 p-3 rounded-full hover:bg-white/20 transition">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="bg-white/10 p-3 rounded-full hover:bg-white/20 transition">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="bg-white/10 p-3 rounded-full hover:bg-white/20 transition">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-white/20 pt-6 text-center text-sm opacity-75">
+                <p>&copy; 2025 RE/MAX Vantagem Home. Todos os direitos reservados. | AMI 7772</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Calculator functionality
+        function calcularSimulacao() {
+            const valorDivida = parseFloat(document.getElementById('valorDivida').value) || 0;
+            const euriborAtual = parseFloat(document.getElementById('euriborAtual').value) || 0;
+            const spreadAtual = parseFloat(document.getElementById('spreadAtual').value) || 0;
+            const prazoRestante = parseInt(document.getElementById('prazoRestante').value) || 0;
+            const novoEuribor = parseFloat(document.getElementById('novoEuribor').value) || 0;
+            const novoSpread = parseFloat(document.getElementById('novoSpread').value) || 0;
+            const novoPrazo = parseInt(document.getElementById('novoPrazo').value) || 0;
+            
+            if (valorDivida <= 0 || euriborAtual < 0 || spreadAtual <= 0 || prazoRestante <= 0 || novoEuribor < 0 || novoSpread <= 0 || novoPrazo <= 0) {
+                alert('Por favor, preencha todos os campos com valores válidos.');
+                return;
+            }
+            
+            // Calcular taxa atual (Euribor + Spread)
+            const taxaAtual = euriborAtual + spreadAtual;
+            const taxaMensalAtual = taxaAtual / 100 / 12;
+            const numPrestacoes = prazoRestante * 12;
+            const prestacaoAtual = valorDivida * (taxaMensalAtual * Math.pow(1 + taxaMensalAtual, numPrestacoes)) / (Math.pow(1 + taxaMensalAtual, numPrestacoes) - 1);
+            
+            // Calcular nova taxa (Novo Euribor + Novo Spread)
+            const novaTaxa = novoEuribor + novoSpread;
+            const novaTaxaMensal = novaTaxa / 100 / 12;
+            const novoNumPrestacoes = novoPrazo * 12;
+            const novaPrestacao = valorDivida * (novaTaxaMensal * Math.pow(1 + novaTaxaMensal, novoNumPrestacoes)) / (Math.pow(1 + novaTaxaMensal, novoNumPrestacoes) - 1);
+            
+            // Cálculos de poupança
+            const poupancaMensal = prestacaoAtual - novaPrestacao;
+            const poupancaAnual = poupancaMensal * 12;
+            
+            // Poupança total considerando o prazo mais curto
+            const prazoComparacao = Math.min(prazoRestante, novoPrazo);
+            const poupancaTotal = poupancaMensal * (prazoComparacao * 12);
+            
+            // Atualizar resultados
+            document.getElementById('prestacaoAtual').textContent = `€${prestacaoAtual.toFixed(2)}`;
+            document.getElementById('novaPrestacao').textContent = `€${novaPrestacao.toFixed(2)}`;
+            document.getElementById('poupancaMensal').textContent = `€${poupancaMensal.toFixed(2)}`;
+            document.getElementById('poupancaAnual').textContent = `€${poupancaAnual.toFixed(2)}`;
+            document.getElementById('poupancaTotal').textContent = `€${poupancaTotal.toFixed(2)}`;
+            
+            // Mostrar resultados
+            document.getElementById('resultados').classList.remove('hidden');
+            document.getElementById('resultados').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const nome = document.getElementById('nome').value;
+            const telefone = document.getElementById('telefone').value;
+            const email = document.getElementById('email').value;
+            const observacoes = document.getElementById('observacoes').value;
+            
+            if (!nome || !telefone || !email) {
+                alert('Por favor, preencha todos os campos obrigatórios.');
+                return;
+            }
+            
+            // Simular envio do formulário
+            document.getElementById('mensagemSucesso').classList.remove('hidden');
+            document.getElementById('contactForm').reset();
+            document.getElementById('mensagemSucesso').scrollIntoView({ behavior: 'smooth' });
+        });
+        
+        // Adicionar formatação automática ao campo de telefone
+        document.getElementById('telefone').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length >= 3) {
+                value = value.replace(/(\d{3})(\d{3})(\d{3})/, '$1 $2 $3');
+            }
+            e.target.value = value;
+        });
+    </script>
+</body>
+</html>
